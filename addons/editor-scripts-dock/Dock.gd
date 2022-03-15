@@ -1,14 +1,14 @@
-tool
+@tool
 extends Control
 
 # Node references
-onready var filter_scripts : LineEdit = $Layout/FilterScripts
-onready var script_list : ItemList = $Layout/ScriptList
-onready var create_script_button : ToolButton = $Layout/Controls/CreateScriptButton
-onready var locate_script_button : ToolButton = $Layout/Controls/LocateScriptButton
+@onready var filter_scripts : LineEdit = $Layout/FilterScripts
+@onready var script_list : ItemList = $Layout/ScriptList
+@onready var create_script_button : ToolButton = $Layout/Controls/CreateScriptButton
+@onready var locate_script_button : ToolButton = $Layout/Controls/LocateScriptButton
 
 # Public properties
-var editor_settings : EditorSettings setget set_editor_settings
+var editor_settings : EditorSettings #setget set_editor_settings
 var scripts : Array = [] # of Script
 
 # Private properties
@@ -29,7 +29,7 @@ func _ready() -> void:
 	
 	filter_scripts.placeholder_text = "Filter scripts"
 	filter_scripts.clear_button_enabled = true
-	filter_scripts.right_icon = get_icon("Search", "EditorIcons")
+	filter_scripts.right_icon = EditorSettings.get_icon("Search", "EditorIcons")
 	filter_scripts.connect("text_changed", self, "_on_filter_scripts_changed")
 	
 	script_list.clear()
