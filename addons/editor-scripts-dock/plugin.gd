@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 var dock_scene : Control
@@ -7,16 +7,16 @@ var embedded_controls : Array = []
 func _enter_tree() -> void:
 	dock_scene = load("res://addons/editor-scripts-dock/Dock.tscn").instance()
 	add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_UR, dock_scene)
-	dock_scene.connect("script_selected", self, "_on_script_selected_in_dock")
-	dock_scene.connect("script_create_requested", self, "_on_script_create_requested")
-	dock_scene.connect("script_locate_requested", self, "_on_script_locate_requested")
+	dock_scene.script_selected.connect(_on_script_selected_in_dock)
+	dock_scene.script_create_requested.connect(_on_script_create_requested)
+	dock_scene.script_locate_requested.connect(_on_script_locate_requested)
 	
 	var editor_settings = get_editor_interface().get_editor_settings()
 	dock_scene.set_editor_settings(editor_settings)
 	
 	var script_editor = get_editor_interface().get_script_editor()
-	script_editor.connect("editor_script_changed", self, "_on_editor_script_changed")
-	script_editor.connect("script_close", self, "_on_editor_script_close")
+	script_editor.editor_script_changed.connect(_on_editor_script_changed)
+	script_editor.script_close.connect(_on_editor_script_close)
 	
 	_update_script_list()
 	_update_script_label()
@@ -47,12 +47,12 @@ func _update_script_list(exclude_script : Script = null) -> void:
 	dock_scene.select_script(script_editor.get_current_script())
 
 func _on_editor_script_changed(active_script : Script) -> void:
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	_update_script_list()
 	_update_script_label()
 
 func _on_editor_script_close(closed_script : Script) -> void:
-	yield(get_tree(), "idle_frame")
+	await get_tree().idle_frame
 	_update_script_list(closed_script)
 
 func _on_script_selected_in_dock(active_script : Script) -> void:
